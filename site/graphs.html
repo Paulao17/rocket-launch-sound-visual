@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<HTML>
+  <head>
+    <title>Yes des graphs</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <form oninput="update()">
+      <input type="checkbox" id="boseANC" checked><label for="boseANC">Bose with ANC</label>
+      <input type="checkbox" id="boseNoANC" checked><label for="boseNoANC">Bose without ANC</label>
+      <input type="checkbox" id="plantronicsANC" checked><label for="plantronicsANC">Plantronics with ANC</label>
+      <input type="checkbox" id="plantronicsNoANC" checked><label for="plantronicsNoANC">Plantronics without ANC</label>
+      <input type="checkbox" id="chantier" checked><label for="chantier">Casque de Chantier</label>
+      <input type="checkbox" id="none" checked><label for="none">None</label>
+    </form>
+    <canvas id="myChart"></canvas>
+    <noscript>Requires js, bros</noscript>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="./data.js"></script>
+  <script src="./graphs.js"></script>
+</HTML>
