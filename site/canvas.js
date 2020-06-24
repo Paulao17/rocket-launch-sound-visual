@@ -5,6 +5,9 @@ const squareSide = 400
 const squareMiddle = squareSide / 2
 const pixelToMeterRatio = 7650 / 122
 
+x = 0
+y = 0
+
 function circle(x, y, radius, color) {
   ctx.strokeStyle = color
   ctx.beginPath();
@@ -63,11 +66,11 @@ function draw(x, y) {
 
 function click(e) {
   var rect = canvas.getBoundingClientRect();
-  var x = e.clientX - rect.left
-  var y = e.clientY - rect.top
+  x = e.clientX - rect.left
+  y = e.clientY - rect.top
   draw(x, y)
 }
 
-canvas.addEventListener("click", click)
+canvas.addEventListener('click', click)
 
 document.getElementById('coord-pxtom').innerHTML = Math.floor(pixelToMeterRatio)

@@ -1,90 +1,102 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Style-Type" content="text/css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Paul ALNET" />
-    <meta name="date" content="2020-06-05" />
-    <meta property="og:title" content="Calcul du niveau sonore d'un lancement de fusee" />
-    <meta property="og:description"
-  content="Simulation basique du niveau sonore percue a une distance donnee d'un lancement de fusee." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://yocraft.net/schl/site/" />
-    <meta property="og:image" content="https://yocraft.net/schl/site/site40.png" />
-    <meta property="og:locale" content="fr_FR" />
-    <title>Calcul du niveau sonore d'un lancement de fusee</title>
-    <style type="text/css">code{white-space: pre;}</style>
-  </head>
-  <body>
-    <a href="graphs.html">Cool graphs & stuff</a>
-    <br>
-    <div style="border-color: black;border: 5px;border-style:solid;display:inline-block">
-      <canvas id="rocket" width="400" height="400" style="background-image: url('./site40.png');">
-        One beautiful rocket, one.
-      </canvas>
-    </div>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Paul ALNET" />
+  <meta name="date" content="2020-06-05" />
+  <meta property="og:title" content="Calcul du niveau sonore d'un lancement de fusee" />
+  <meta property="og:description" content="Simulation basique du niveau sonore percue a une distance donnee d'un lancement de fusee." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yocraft.net/schl/site/" />
+  <meta property="og:image" content="https://yocraft.net/schl/site/site40.png" />
+  <meta property="og:locale" content="fr_FR" />
+  <title>Calcul du niveau sonore d'un lancement de fusee</title>
+  <style type="text/css">
+    code {
+      white-space: pre;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="graphs.html">Cool graphs & stuff</a>
+  <br>
+  <div style="border-color: black;border: 5px;border-style:solid;display:inline-block">
+    <canvas id="rocket" width="400" height="400" style="background-image: url('./site40.png');">
+      One beautiful rocket, one.
+    </canvas>
+  </div>
+  <div>
     <p>x : <span id="coord-x">0</span></p>
     <p>y : <span id="coord-y">0</span></p>
     <p>Distance jusqu'au site <img src="https://tex.s2cms.ru/svg/r" alt="r" />: <span id="coord-distm">0</span>m (<span id="coord-dist">0</span>px) <a href="#dist">?</a></p>
     <p>Ratio pixel vers m&egrave;tres : <span id="coord-pxtom">0</span> m/px</p>
-    <p><label for="r0">Niveau d'intensit&eacute; sonore <img src="https://tex.s2cms.ru/svg/L_0" alt="L_0" /> de la fus&eacute;e : </label><input type="number" step="0.01" id="db" value="160.9"> dB <a href="#db">?</a></p>
-    <p><label for="db">Rayon <img src="https://tex.s2cms.ru/svg/r_0" alt="r_0" /> de la sph&egrave;re associ&eacute;e &agrave; la valeur ci-dessus: </label><input type="number" step="0.1" id="r0" value="38.1"> m</p>
+    <p><label for="r0">Niveau d'intensit&eacute; sonore <img src="https://tex.s2cms.ru/svg/L_0" alt="L_0" /> de la fus&eacute;e : </label><input oninput="draw(x,y)" type="number" step="0.01" id="db" value="160.9"> dB <a href="#db">?</a></p>
+    <p><label for="db">Rayon <img src="https://tex.s2cms.ru/svg/r_0" alt="r_0" /> de la sph&egrave;re associ&eacute;e &agrave; la valeur ci-dessus: </label><input oninput="draw(x,y)" type="number" step="0.1" id="r0" value="38.1"> m</p>
     <p>Intensit&eacute; sonore <img src="https://tex.s2cms.ru/svg/I" alt="I" /> de la fus&eacute;e : <span id="I">0</span> <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D" alt="W.m^{-2}" /> <a href="#I">?</a></p>
-    <p><label for="I0">Seuil d'audibilit&eacute; <img src="https://tex.s2cms.ru/svg/I_0" alt="I_0" /> : </label><input type="number" step="1.0e-13" id="I0" value="1.0e-12"> <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D" alt="W.m^{-2}" /></p>
+    <p><label for="I0">Seuil d'audibilit&eacute; <img src="https://tex.s2cms.ru/svg/I_0" alt="I_0" /> : </label><input oninput="draw(x,y)" type="number" step="1.0e-13" id="I0" value="1.0e-12"> <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D"
+        alt="W.m^{-2}" /></p>
     <p>Puissance <img src="https://tex.s2cms.ru/svg/P" alt="P" /> : <span id="P">0</span> <img src="https://tex.s2cms.ru/svg/W" alt="W" /> <a href="#P">?</a></p>
     <p>Intensit&eacute; sonore <img src="https://tex.s2cms.ru/svg/I_r" alt="I_r" /> de la fus&eacute;e &agrave; la distance donnée: <span id="Ir">0</span> <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D" alt="W.m^{-2}" /> <a href="#Ir">?</a></p>
     <p>Niveau d'intensit&eacute; sonore <img src="https://tex.s2cms.ru/svg/L_r" alt="L_r" /> de la fus&eacute;e &agrave; la distance donnée: <span id="Lr">0</span> dB <a href="#Lr">?</a></p>
-
-    <div id="dist">
-      <h4>La distance en pixels (px) est determin&eacute;e par l'&eacute;quation suivante (th&eacute;or&egrave;me de Pythagore):</h4>
-      <img align="center" src="https://tex.s2cms.ru/svg/r%20%3D%20%5Csqrt%7B(x%20-%20x_m)%5E2%20%2B%20(y%20-%20y_m)%5E2%7D" alt="r = \sqrt{(x - x_m)^2 + (y - y_m)^2}" />
-      <p>O&ugrave; <img src="https://tex.s2cms.ru/svg/x" alt="x" /> et <img src="https://tex.s2cms.ru/svg/y" alt="y" /> correspondent aux coordonn&eacute;es du curseur et <img src="https://tex.s2cms.ru/svg/x_m" alt="x_m" /> et <img src="https://tex.s2cms.ru/svg/y_m" alt="y_m" /> aux coordonn&eacute;es du milieu du carr&eacute;. On convertit ensuite en m&egrave;tres en utilisant le ratio metres/pixels attach&eacute; a l'image satellitaire.</p>
-    </div>
-    <div id="dist">
-      <h4>Niveau d’intensité sonore de la fusée</h4>
-      <p>Le niveau d’intensité sonore est propre à chaque engin et doit être coordonné attentivement avec la distance <img src="https://tex.s2cms.ru/svg/r_0" alt="r_0" />.</p>
-      <p>Selon <a href="https://apps.dtic.mil/dtic/tr/fulltext/u2/a612280.pdf">un rapport de 2011</a>, on a les stats suivantes:</p>
-      <p>SpaceX Falcon 9 à 125 ft. (38.1 m) : 156.1 dB</p>
-      <p>SpaceX Falcon Heavy à 125 ft. (38.1 m) : 160.9 dB</p>
-    </div>
-    <div id="I">
-      <h4>Intensit&eacute; sonore de la fus&eacute;e</h4>
-      <p>On sait que le niveau d’intensité sonore en décibel est donnée par la formule
-        <img src="https://tex.s2cms.ru/svg/L%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="L = 10 \times log \frac{I}{I_0}" />
-        <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20%5Cfrac%7BL%7D%7B10%7D%20%3D%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="\Leftrightarrow \frac{L}{10} = log \frac{I}{I_0}" />
-        <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20%5Cfrac%7BI%7D%7BI_0%7D%20%3D%2010%5E%7B%5Cfrac%7BL%7D%7B10%7D%7D" alt="\Leftrightarrow \frac{I}{I_0} = 10^{\frac{L}{10}}" />
-        <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20I%20%3D%2010%5E%7B%5Cfrac%7BL%7D%7B10%7D%7D%20%5Ctimes%20I_0" alt="\Leftrightarrow I = 10^{\frac{L}{10}} \times I_0" />
-      </p>
-      <p>On utilise donc ici <img align="center" src="https://tex.s2cms.ru/svg/I%20%3D%2010%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20I_0" alt="I = 10^{\frac{L_0}{10}} \times I_0" /></p>
-    </div>
-    <div id="P">
-      <h4>Puissance</h4>
-      <p>On sait que la puissance en watts est donnée par la formule
-        <img src="https://tex.s2cms.ru/svg/I%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20r%5E2%7D" alt="I = \frac{P}{4 \pi r^2}" />
-        <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20P%20%3D%204%20%5Cpi%20I%20r%5E2%20" alt="\Leftrightarrow P = 4 \pi I r^2 " />
-      </p>
-    </div>
-    <div id="Ir">
-      <h4>Intensit&eacute; sonore de la fus&eacute;e &agrave; la distance donnée</h4>
-      <p>On sait que l’intensité sonore en <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D" alt="W.m^{-2}" /> est donnée par la formule
-        <img src="https://tex.s2cms.ru/svg/I%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20r%5E2%7D" alt="I = \frac{P}{4 \pi r^2}" />
-      </p>
-      <p>On utilise donc ici <img src="https://tex.s2cms.ru/svg/I_r%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20%7Br_0%7D%5E2%7D" alt="I_r = \frac{P}{4 \pi {r_0}^2}" /></p>
-    </div>
-    <div id="Ir">
-      <h4>Niveau d’intensité sonore de la fusée &agrave; la distance donnée</h4>
-      <p>On sait que le niveau d’intensité sonore en décibel est donnée par la formule
-        <img src="https://tex.s2cms.ru/svg/L%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="L = 10 \times log \frac{I}{I_0}" />
-      </p>
-      <p>On utilise donc <img src="https://tex.s2cms.ru/svg/L_r%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI_r%7D%7BI_0%7D" alt="L_r = 10 \times log \frac{I_r}{I_0}" /></p>
-    </div>
-    <div id="bigflex">
-      <h4>Une seule équation</h4>
-      <p>Si on souhaite obtenir une seule equation pour déterminer le niveau d’intensité sonore, on peut remonter et simplifier comme suit:</p>
-      <p><img src="https://tex.s2cms.ru/svg/L_r%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI_r%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7BP%7D%7B4%20%5Cpi%20%7Br%7D%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7B4%20%5Cpi%20I%20%7Br_0%7D%5E2%7D%7B4%20%5Cpi%20%7Br%7D%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7BI%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%7D%7BI_0%7D%20" alt="L_r = 10 \times log \frac{I_r}{I_0} = 10 \times log \frac{\frac{P}{4 \pi {r}^2}}{I_0} = 10 \times log \frac{\frac{4 \pi I {r_0}^2}{4 \pi {r}^2}}{I_0} = 10 \times log \frac{\frac{I {r_0}^2}{r^2}}{I_0} " />
-        <img src="https://tex.s2cms.ru/svg/%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7B10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20I_0%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%3D%2010%20%5Ctimes%20(log%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20log(10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D))" alt="= 10 \times log \frac{\frac{10^{\frac{L_0}{10}} \times I_0 {r_0}^2}{r^2}}{I_0} = 10 \times log \frac{10^{\frac{L_0}{10}} \times {r_0}^2}{r^2} = 10 \times (log \frac{{r_0}^2}{r^2} + log(10^{\frac{L_0}{10}}))" />
-        <img src="https://tex.s2cms.ru/svg/%3D%2010%20%5Ctimes%20(log%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20%5Cfrac%7BL_0%7D%7B10%7D)%20%3D%2010%20%5Ctimes%20%5Clog%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20%5CL_0" alt="= 10 \times (log \frac{{r_0}^2}{r^2} + \frac{L_0}{10}) = 10 \times \log \frac{{r_0}^2}{r^2} + \L_0" /></p>
+  </div>
+  <div id="dist">
+    <h4>La distance en pixels (px) est determin&eacute;e par l'&eacute;quation suivante (th&eacute;or&egrave;me de Pythagore):</h4>
+    <img align="center" src="https://tex.s2cms.ru/svg/r%20%3D%20%5Csqrt%7B(x%20-%20x_m)%5E2%20%2B%20(y%20-%20y_m)%5E2%7D" alt="r = \sqrt{(x - x_m)^2 + (y - y_m)^2}" />
+    <p>O&ugrave; <img src="https://tex.s2cms.ru/svg/x" alt="x" /> et <img src="https://tex.s2cms.ru/svg/y" alt="y" /> correspondent aux coordonn&eacute;es du curseur et <img src="https://tex.s2cms.ru/svg/x_m" alt="x_m" /> et <img
+        src="https://tex.s2cms.ru/svg/y_m" alt="y_m" /> aux coordonn&eacute;es du milieu du carr&eacute;. On convertit ensuite en m&egrave;tres en utilisant le ratio metres/pixels attach&eacute; a l'image satellitaire.</p>
+  </div>
+  <div id="dist">
+    <h4>Niveau d’intensité sonore de la fusée</h4>
+    <p>Le niveau d’intensité sonore est propre à chaque engin et doit être coordonné attentivement avec la distance <img src="https://tex.s2cms.ru/svg/r_0" alt="r_0" />.</p>
+    <p>Selon <a href="https://apps.dtic.mil/dtic/tr/fulltext/u2/a612280.pdf">un rapport de 2011</a>, on a les stats suivantes:</p>
+    <p>SpaceX Falcon 9 à 125 ft. (38.1 m) : 156.1 dB</p>
+    <p>SpaceX Falcon Heavy à 125 ft. (38.1 m) : 160.9 dB</p>
+  </div>
+  <div id="I">
+    <h4>Intensit&eacute; sonore de la fus&eacute;e</h4>
+    <p>On sait que le niveau d’intensité sonore en décibel est donnée par la formule
+      <img src="https://tex.s2cms.ru/svg/L%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="L = 10 \times log \frac{I}{I_0}" />
+      <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20%5Cfrac%7BL%7D%7B10%7D%20%3D%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="\Leftrightarrow \frac{L}{10} = log \frac{I}{I_0}" />
+      <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20%5Cfrac%7BI%7D%7BI_0%7D%20%3D%2010%5E%7B%5Cfrac%7BL%7D%7B10%7D%7D" alt="\Leftrightarrow \frac{I}{I_0} = 10^{\frac{L}{10}}" />
+      <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20I%20%3D%2010%5E%7B%5Cfrac%7BL%7D%7B10%7D%7D%20%5Ctimes%20I_0" alt="\Leftrightarrow I = 10^{\frac{L}{10}} \times I_0" />
+    </p>
+    <p>On utilise donc ici <img align="center" src="https://tex.s2cms.ru/svg/I%20%3D%2010%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20I_0" alt="I = 10^{\frac{L_0}{10}} \times I_0" /></p>
+  </div>
+  <div id="P">
+    <h4>Puissance</h4>
+    <p>On sait que la puissance en watts est donnée par la formule
+      <img src="https://tex.s2cms.ru/svg/I%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20r%5E2%7D" alt="I = \frac{P}{4 \pi r^2}" />
+      <img src="https://tex.s2cms.ru/svg/%5CLeftrightarrow%20P%20%3D%204%20%5Cpi%20I%20r%5E2%20" alt="\Leftrightarrow P = 4 \pi I r^2 " />
+    </p>
+  </div>
+  <div id="Ir">
+    <h4>Intensit&eacute; sonore de la fus&eacute;e &agrave; la distance donnée</h4>
+    <p>On sait que l’intensité sonore en <img src="https://tex.s2cms.ru/svg/W.m%5E%7B-2%7D" alt="W.m^{-2}" /> est donnée par la formule
+      <img src="https://tex.s2cms.ru/svg/I%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20r%5E2%7D" alt="I = \frac{P}{4 \pi r^2}" />
+    </p>
+    <p>On utilise donc ici <img src="https://tex.s2cms.ru/svg/I_r%20%3D%20%5Cfrac%7BP%7D%7B4%20%5Cpi%20%7Br_0%7D%5E2%7D" alt="I_r = \frac{P}{4 \pi {r_0}^2}" /></p>
+  </div>
+  <div id="Ir">
+    <h4>Niveau d’intensité sonore de la fusée &agrave; la distance donnée</h4>
+    <p>On sait que le niveau d’intensité sonore en décibel est donnée par la formule
+      <img src="https://tex.s2cms.ru/svg/L%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI%7D%7BI_0%7D" alt="L = 10 \times log \frac{I}{I_0}" />
+    </p>
+    <p>On utilise donc <img src="https://tex.s2cms.ru/svg/L_r%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI_r%7D%7BI_0%7D" alt="L_r = 10 \times log \frac{I_r}{I_0}" /></p>
+  </div>
+  <div id="bigflex">
+    <h4>Une seule équation</h4>
+    <p>Si on souhaite obtenir une seule equation pour déterminer le niveau d’intensité sonore, on peut remonter et simplifier comme suit:</p>
+    <p><img
+        src="https://tex.s2cms.ru/svg/L_r%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7BI_r%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7BP%7D%7B4%20%5Cpi%20%7Br%7D%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7B4%20%5Cpi%20I%20%7Br_0%7D%5E2%7D%7B4%20%5Cpi%20%7Br%7D%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7BI%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%7D%7BI_0%7D%20"
+        alt="L_r = 10 \times log \frac{I_r}{I_0} = 10 \times log \frac{\frac{P}{4 \pi {r}^2}}{I_0} = 10 \times log \frac{\frac{4 \pi I {r_0}^2}{4 \pi {r}^2}}{I_0} = 10 \times log \frac{\frac{I {r_0}^2}{r^2}}{I_0} " />
+      <img
+        src="https://tex.s2cms.ru/svg/%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B%5Cfrac%7B10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20I_0%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%7D%7BI_0%7D%20%3D%2010%20%5Ctimes%20log%20%5Cfrac%7B10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D%20%5Ctimes%20%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%3D%2010%20%5Ctimes%20(log%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20log(10%5E%7B%5Cfrac%7BL_0%7D%7B10%7D%7D))"
+        alt="= 10 \times log \frac{\frac{10^{\frac{L_0}{10}} \times I_0 {r_0}^2}{r^2}}{I_0} = 10 \times log \frac{10^{\frac{L_0}{10}} \times {r_0}^2}{r^2} = 10 \times (log \frac{{r_0}^2}{r^2} + log(10^{\frac{L_0}{10}}))" />
+      <img src="https://tex.s2cms.ru/svg/%3D%2010%20%5Ctimes%20(log%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20%5Cfrac%7BL_0%7D%7B10%7D)%20%3D%2010%20%5Ctimes%20%5Clog%20%5Cfrac%7B%7Br_0%7D%5E2%7D%7Br%5E2%7D%20%2B%20%5CL_0" alt="= 10 \times (log \frac{{r_0}^2}{r^2} + \frac{L_0}{10}) = 10 \times \log \frac{{r_0}^2}{r^2} + \L_0" /></p>
     </div>
 
     <p>Note: Les calculs prennent tres peu de facteurs en compte.</p>
